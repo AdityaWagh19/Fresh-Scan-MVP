@@ -1,0 +1,26 @@
+[Unit]
+Description=Smart Fridge System
+After=network.target mongodb.service
+
+[Service]
+Type=simple
+User=smartfridge
+Group=smartfridge
+WorkingDirectory=/opt/smart_fridge
+Environment="PATH=/opt/smart_fridge/venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+ExecStart=/opt/smart_fridge/venv/bin/python main.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/smart_fridge/cache /opt/smart_fridge/logs
+
+[Install]
+WantedBy=multi-user.target

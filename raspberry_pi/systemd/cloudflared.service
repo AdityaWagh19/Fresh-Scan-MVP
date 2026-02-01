@@ -1,0 +1,28 @@
+[Unit]
+Description=Cloudflare Tunnel
+After=network.target network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+Restart=always
+RestartSec=10
+TimeoutStartSec=0
+ExecStart=/usr/local/bin/cloudflared tunnel run smart-fridge-camera
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/pi/.cloudflared
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=cloudflared
+
+[Install]
+WantedBy=multi-user.target

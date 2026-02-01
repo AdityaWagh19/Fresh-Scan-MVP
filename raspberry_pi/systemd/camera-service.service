@@ -1,0 +1,31 @@
+[Unit]
+Description=Smart Fridge Camera Service
+After=network.target network-online.target cloudflared.service
+Wants=network-online.target
+Requires=cloudflared.service
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/smart-fridge-camera
+Environment="PATH=/home/pi/.local/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONUNBUFFERED=1"
+ExecStart=/usr/bin/python3 /home/pi/smart-fridge-camera/rpi_camera_server.py
+Restart=always
+RestartSec=10
+TimeoutStartSec=30
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ReadWritePaths=/home/pi/smart-fridge-camera
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=camera-service
+
+[Install]
+WantedBy=multi-user.target

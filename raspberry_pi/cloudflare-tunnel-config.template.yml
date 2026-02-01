@@ -1,0 +1,27 @@
+# Cloudflare Tunnel Configuration Template
+# This file will be created at ~/.cloudflared/config.yml during setup
+
+# Replace <tunnel-id> with your actual tunnel ID
+# Replace <domain> with your actual domain (e.g., camera.yourdomain.com)
+
+tunnel: <tunnel-id>
+credentials-file: /home/pi/.cloudflared/<tunnel-id>.json
+
+ingress:
+  # Route your domain to local camera service
+  - hostname: <domain>
+    service: http://localhost:5000
+    originRequest:
+      noTLSVerify: false
+      connectTimeout: 30s
+      tlsTimeout: 10s
+  
+  # Catch-all rule (required - must be last)
+  - service: http_status:404
+
+# Optional: Logging configuration
+# loglevel: info
+# logfile: /var/log/cloudflared.log
+
+# Optional: Metrics
+# metrics: localhost:8080
